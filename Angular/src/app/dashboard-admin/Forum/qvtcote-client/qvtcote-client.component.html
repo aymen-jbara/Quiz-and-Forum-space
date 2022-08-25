@@ -1,0 +1,853 @@
+<div id="content-page" class="content-page">
+  <div class="container">
+    <div class="row">
+      <div style="margin: 0px 0px 20px 0px" class="header-for-bg">
+
+        <div class="background-header position-relative">
+          <img src="../assets/images/page-img/profile-bg6.jpg" class="img-fluid w-100" alt="header-bg">
+
+          <div class="title-on-header">
+            <img src="https://thumbs.dreamstime.com/b/logo-social-de-r%C3%A9seau-media-illustration-vecteur-116810481.jpg" style="margin: -80px 0px 0px 0px;border-radius: 80%" width="210" alt="">
+
+
+               <div class="App" style="margin: -120px 0px 0px 680px">
+                 <br>
+                 <h3>Espace Forum </h3>
+                 <div>
+                   <div class="logo"></div>
+                 </div>
+                 <div class="flex-container">
+                   <ng-container *ngFor="let star of stars">
+                     <app-star [starId]="star" [rating]="hoverState || rating" (enter)="enter($event)" (leave)="leave($event)"
+                               (bigClick)="updateRating(star)">
+                     </app-star>
+                   </ng-container>
+                 </div>
+                 <h6 style="margin: -20px 0px 0px 260px">{{StarRating.toFixed(1)}}</h6>
+
+               </div>
+            <button  style="margin: -80px 0px 0px -720px" type="button" class="btn btn-secondary mr-1" data-toggle="modal" (click)="largeModal.show()" (click)="GetConseilsUser()">
+              Launch Conseil {{user.name}}
+            </button>
+             <!---->
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 row m-0 p-0">
+        <div class="col-sm-12">
+          <div id="post-modal-data" class="card card-block card-stretch card-height">
+            <div class="card-header d-flex justify-content-between">
+              <div class="header-title">
+                <h4 class="card-title" style="color: #303030">Create Post</h4>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="user-img">
+                  <img src="../assets/images/user/1.jpg" alt="userimg" class="avatar-60 rounded-circle">
+                </div>
+                <form class="post-text ms-3 w-100 "  data-bs-toggle="modal" data-bs-target="#post-modal" >
+                  <input type="text" class="form-control rounded" placeholder="Write something here..." style="border:none;">
+                </form>
+              </div>
+              <hr>
+              <ul class=" post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
+                <li class="me-3 mb-md-0 mb-2">
+                  <a href="#" class="btn btn-soft-primary">
+                    <img src="../assets/images/small/07.png" alt="icon" class="img-fluid me-2"> Photo/Video
+                  </a>
+                </li>
+
+              </ul>
+            </div>
+            <div class="modal fade" id="post-modal" tabindex="-1"  aria-labelledby="post-modalLabel" aria-hidden="true" >
+              <div class="modal-dialog   modal-fullscreen-sm-down">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="post-modalLabel">Create Post</h5>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ri-close-fill"></i></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="d-flex align-items-center">
+                      <div class="user-img">
+                        <img src="../assets/images/user/1.jpg" alt="userimg" class="avatar-60 rounded-circle img-fluid">
+                      </div>
+                      <form class="post-text ms-3 w-100" >
+                        <input  [(ngModel)]="pub.statut" [ngModelOptions]="{standalone: true}"  type="text" class="form-control rounded" placeholder="Write something here..." style="border:none;" >
+                        {{pub.statut}}
+                      </form>
+                    </div>
+                    <hr>
+                    <ul class="d-flex flex-wrap align-items-center list-inline m-0 p-0">
+                      <li class="col-md-6 mb-3">
+                        <div class="bg-soft-primary rounded p-2 pointer me-3"><a href="#"></a><img src="../assets/images/small/07.png" alt="icon" class="img-fluid"> Photo/Video</div>
+                      </li>
+                    </ul>
+                    <hr>
+                    <button type="submit" class="btn btn-primary d-block w-100 mt-3" (click)="addPublication()">Post</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+<!--Publication-->
+        <div class="col-sm-12" *ngFor="let listpub of ListPub">
+          <div class="card card-block card-stretch card-height">
+            <div class="card-body">
+              <div class="user-post-data">
+                <div class="d-flex justify-content-between">
+                  <div class="me-3">
+                    <img class="rounded-circle img-fluid" src="../assets/images/user/02.jpg" alt="">
+                  </div>
+                  <div class="w-100">
+                    <div class="d-flex justify-content-between">
+                      <div class="">
+                        <h5 class="mb-0 d-inline-block">{{listpub.user.name}}</h5>
+                        <p class="mb-0 d-inline-block">Added New Pub in his Timeline</p>
+                      </div>
+                      <div class="card-post-toolbar">
+                        <div class="dropdown">
+
+                          <div  class="card-header-toolbar d-flex align-items-center">
+                            <div class="dropdown">
+                              <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                                <i class="ri-more-fill h4"></i>
+                              </div>
+                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" style="">
+                                <a class="dropdown-item" ><i class="ri-eye-fill me-2"></i>View</a>
+                                <a (click)="deletePub(listpub)" class="dropdown-item" ><i class="ri-delete-bin-6-fill me-2"></i>Delete</a>
+                                <a  (click)="myModal.show()"  class="dropdown-item" ><i class="ri-pencil-fill me-2"></i>Edit</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <p>{{listpub.statut}}</p>
+              </div>
+              <div class="user-post">
+              <!--  <div class="ratio ratio-16x9">
+                  <iframe  src="https://www.youtube.com/embed/j_GsIanLxZk?rel=0" allowfullscreen></iframe>
+                </div>-->
+              </div>
+              <div class="comment-area mt-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                  <div class="like-block position-relative d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                      <div class="like-data">
+                        <div class="dropdown">
+                              <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                              <img src="../assets/images/icon/01.png" class="img-fluid" alt="">
+                              </span>
+                          <div class="dropdown-menu py-2">
+                            <a class="ms-2 me-2" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Like"><img src="../assets/images/icon/01.png" class="img-fluid" alt=""></a>
+                            <a class="me-2" href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Love"><img src="../assets/images/icon/02.png" class="img-fluid" alt=""></a>
+                            <a class="me-2" href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Happy"><img src="../assets/images/icon/03.png" class="img-fluid" alt=""></a>
+                            <a class="me-2" href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="HaHa"><img src="../assets/images/icon/04.png" class="img-fluid" alt=""></a>
+                            <a class="me-2" href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Think"><img src="../assets/images/icon/05.png" class="img-fluid" alt=""></a>
+                            <a class="me-2" href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Sade" ><img src="../assets/images/icon/06.png" class="img-fluid" alt=""></a>
+                            <a class="me-2" href="#"  data-bs-toggle="tooltip" data-bs-placement="top" title="Lovely"><img src="../assets/images/icon/07.png" class="img-fluid" alt=""></a>
+                          </div>
+                        </div>
+                      </div>
+               <div class="total-like-block ms-2 me-3">
+                        <div class="dropdown">
+                              <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button"  >
+                              {{listpub.nbrLike}} Likes
+                              </span>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Max Emum</a>
+                            <a class="dropdown-item" href="#">Bill Yerds</a>
+                            <a class="dropdown-item" href="#">Hap E. Birthday</a>
+                            <a class="dropdown-item" href="#">Tara Misu</a>
+                            <a class="dropdown-item" href="#">Midge Itz</a>
+                            <a class="dropdown-item" href="#">Sal Vidge</a>
+                            <a class="dropdown-item" href="#">Other</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="total-comment-block">
+                      <div class="dropdown">
+                           <span (click)="CountComment(listpub)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                           {{listpub.nbrComment}} Comment
+                           </span>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Max Emum</a>
+                          <a class="dropdown-item" href="#">Bill Yerds</a>
+                          <a class="dropdown-item" href="#">Hap E. Birthday</a>
+                          <a class="dropdown-item" href="#">Tara Misu</a>
+                          <a class="dropdown-item" href="#">Midge Itz</a>
+                          <a class="dropdown-item" href="#">Sal Vidge</a>
+                          <a class="dropdown-item" href="#">Other</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="share-block d-flex align-items-center feather-icon mt-2 mt-md-0">
+                    <a  data-bs-toggle="offcanvas" data-bs-target="#share-btn" aria-controls="share-btn"><i class="ri-share-line"></i>
+                      </a>
+                  </div>
+                </div>
+                <hr>
+                <ul class="post-comments list-inline p-0 m-0">
+                  <div *ngFor="let comment of ListCommetPub ">
+                  <li style="background-color: #f5f8ff;border-radius: 5%" class="mb-0" *ngIf="comment.isBlocked==false && comment.publication.id==listpub.id">
+                    <div  class="d-flex flex-wrap">
+                      <div class="user-img">
+                        <img src="../assets/images/user/02.jpg" alt="userimg" class="avatar-35 rounded-circle img-fluid">
+                      </div>
+                        <div class="comment-data-block ms-3" style="margin-top: -30px"  >
+                          <br>
+                          <h6>{{comment.user.name}}</h6>
+                          <p class="mb-0"  >{{comment.description}}</p>
+                          <div class="d-flex flex-wrap align-items-center comment-activity">
+                            <p *ngIf="comment.user.id==user.id" (click)="DeleteCommentPub(comment)">delete</p>
+                          </div>
+                        </div>
+                      </div>
+
+                  </li>
+
+                  </div>
+
+                </ul>
+                <form class="comment-text d-flex align-items-center mt-3" action="javascript:void(0);">
+                  <input [(ngModel)]="Comment.description" [ngModelOptions]="{standalone: true}" (keypress)=addComment(listpub.id,$event)  type="text" class="form-control rounded" placeholder="Enter Your Comment">
+                  <div class="comment-attagement d-flex">
+                    <a ><i class="ri-link me-3"></i></a>
+                    <a ><i class="ri-user-smile-line me-3"></i></a>
+                    <a ><i class="ri-camera-line me-3"></i></a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Publication-->
+      <!-- Stories-->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <div  class="row">
+                    <!--******************************************************************************************************************-->
+                      <div   bsModal #infoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div *ngIf="Test==false" style="margin-left:350px " class="modal-dialog modal-info" role="document">
+                          <div class="modal-content" style="width: 150%">
+                            <div class="modal-header">
+                              <div class="container" style="width: 180%">
+                                  <div >
+                                    <div class="modal-header" style="background-color: #eaf6ff">
+                                    <div class="image">
+                                      <img src="https://get-closer.de/wp-content/uploads/2021/05/GetCloser_Logo.png" width="99" alt="logo">
+                                    </div>
+                                    <div class="quiz-header">
+                                      <h4  style="font-family: cursive;text-align: center">QVT :<strong>{{ListQVT[j].description}}</strong></h4>
+                                      <span style="font-style: italic; margin-left: 150px">  Welcome </span> <strong class="mb-0 text-primary">{{user.name}}</strong>
+                                    </div>
+
+                                    </div>
+                                  <div class="d-flex justify-content-around py-3">
+                                    <div class="question-remain">
+                                      <span style="font-style: italic;">Question {{i+1}} of {{ListQVT[j].nbrQuestionMAX}}</span>
+                                    </div>
+                                    <div class="timer">
+                                      {{counter}}sec⏱
+                                    </div>
+                                  </div>
+                                  <div class="progress m-3" >
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar"  [ngStyle]="{'width':progress+'%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                  </div>
+                                    <div *ngIf="testimg==true" style="margin: 0px 0px 0px 70px">
+                                      <img src="https://us.123rf.com/450wm/inueng/inueng1601/inueng160100115/50967989-f%C3%A9licitations-stamp.jpg?ver=6" alt="">
+                                    </div>
+                                    <div *ngIf="testimg==false">
+                                  <div class="question">
+                                    <h3 style="font-family: cursive;text-align: center">{{ListQuestion[i].question}}</h3>
+                                  </div>
+                                  <div class="options">
+                                    <ol>
+                                      <div style="margin: 10px 0px 10px 40px" *ngFor="let a of ListAnswer">
+                                        <div *ngIf="ListQuestion[i].id==a.question.id" aria-label="Select an option" >
+                                              <li >
+                                                <div class="card"  (click)="radioChangeHandler1(a.id)"  (click)="AddResponseUser(selected)" (click)="ConseilQuizz(ListQVT[j].id)" (click)="NextPage() ">
+                                                  <img class="IL-ANSWER" style="margin-left: 120px;" *ngIf="a.typeAnswer=='GOOD'" src="../assets/images/small/09.png" width="7%" alt="icon" class="img-fluid">
+                                                  <img class="IL-ANSWER" style="margin-left: 120px;" *ngIf="a.typeAnswer=='EXCELLENT'" src="../assets/images/icon/02.png" width="7%" class="img-fluid" alt="">
+                                                  <img class="IL-ANSWER" style="margin-left: 120px;" *ngIf="a.typeAnswer=='BAD'" src="../assets/images/icon/06.png" width="7%" class="img-fluid" alt="">
+                                              </div></li>
+                                            </div>
+                                          </div>
+                                    </ol>
+                                  </div>
+                                  <div class="d-flex justify-content-between">
+                                  <!--  <button class="btn btn-danger danger" [disabled]="i===0" (click)="PrecedentPage()"><i class='ri-arrow-left-line side-left-icon' style='font-size:18px'></i></button>-->
+                                    <button style="margin-left: 90%" class="btn btn-success success"  (click)="AddResponseUser(selected)" (click)="ConseilQuizz(ListQVT[j].id)"  (click)="NextPage()" > <i class='ri-arrow-right-line side-right-icon'></i></button>
+                                  </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                          </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                        <div *ngIf="Test==true" style="margin-left:350px " class="modal-dialog modal-info" role="document">
+                          <div class="modal-content" style="width: 150%">
+                            <div class="modal-header">
+                              <h4 class="modal-title" >QVTFtheme : <strong>{{ListQVT[j].description}}</strong></h4>
+                              <button type="button" class="close" (click)="infoModal.hide()" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body" style="background-color: #e8ffff">
+                              <div *ngFor="let lists of ListRQuizz" >
+                                <div  class="card-body" *ngIf="lists.qvt.id==ListQVT[j].id">
+                                  <div class="d-flex justify-content-between">
+
+                                  <div style="width: 60% ;margin-left: -30px"  *ngIf="lists.pourCentageBAD != 0 || lists.pourCentageGood != 0 || lists.pourCentageEx != 0" class="chart-wrapper">
+                                    <canvas    baseChart class="chart"
+                                               [data]="[lists.pourCentageBAD,lists.pourCentageGood,lists.pourCentageEx]"
+                                               [labels]="['%BAD', '%GOOD', '%EXCELENT']"
+                                               [chartType]="pieChartType"
+                                               (chartHover)="chartHovered($event)"
+                                               (chartClick)="chartClicked($event)">{{lists.id}}</canvas>
+                                    <p style="margin-left: 35px;margin-top: 16px" >{{lists.remarque}}</p>
+                                  </div>
+                                  <ngx-qrcode
+                                    [elementType]="elementType"
+                                    [value]="'candidat :'+user.name +', QVT Title :'+lists.qvt.description+', Resultat QVT :{' +' BAD :'+lists.pourCentageBAD +' Good :'+lists.pourCentageGood+' Ex :'+lists.pourCentageEx+'}'"
+                                    cssclass="aclass"
+                                    [errorCorrectionLevel]="correctionLevel">
+                                  </ngx-qrcode>
+                                  </div>
+                                </div>
+                                  </div>
+                              <div class="d-flex justify-content-between">
+                              <a  style="width: 50px; height: 50px;" (click)="Desaffecteion(ListQVT[j].id)" (click)="changeTest()" (click)="infoModal.show()" (click)="startCounter()" (click)="close()" (click)="GetQuestion(ListQVT[j].id)"  class="btn btn-primary  mt-3" style="border-radius: 40%; " >Re:Go!</a>
+                              <a  style="width: 50px; height: 50px" (click)="getPdf(ListQVT[j].id)" class="btn btn-danger  mt-3" style="border-radius: 40%; " >PDF</a>
+                              <a  style="width: 70px; height: 50px;border-radius: 40%; " class="btn btn-secondary mt-3" (click)="infoModal.hide()" (click)="close()"  >Close</a>
+                              </div>
+                            </div>
+
+                          </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+
+                      </div><!-- /.modal -->
+                      <!--******************************************************************************************************************-->
+              <div  >
+                <div style="background-color: #eaf6ff"  class="card-header d-flex justify-content-between">
+                  <div class="header-title">
+                    <h4 class="card-title"style="color: #000000" class="mb-0 text-primary">Quiz : {{ListQVT[j].description}}</h4>
+                  </div>
+                </div>
+                <div >
+                  <img style="width: 80%; margin: 0px 0px 0px 30px" src="https://img.freepik.com/vecteurs-libre/quiz-dans-style-bande-dessinee-pop-art_175838-505.jpg?w=360"   class="rounded-circle img-fluid">
+                  <div class="d-flex justify-content-between"  >
+                    <a  style="width: 60px; height: 50px" class="btn btn-success  mt-3" style="border-radius: 40%; "(click)="precedentQvt()" ><i class='ri-arrow-left-line side-left-icon' style='font-size:18px'></i></a>
+                    <a  style="width: 50px; height: 50px"  (click)="close()" (click)="startCounter()"    (click)=" TestPasserQuiz(ListQVT[j].id,user.id)" (click)="infoModal.show()" (click)="GetQuestion(ListQVT[j].id)"  class="btn btn-primary  mt-3" style="border-radius: 40%; " >GO!</a>
+                    <a  style="width: 80px; height: 50px" class="btn btn-success  mt-3" style="border-radius: 40%; "(click)="nextQvt()" ><i class='ri-arrow-right-line side-right-icon' style='font-size:18px'></i></a>
+                  </div>
+                </div>
+              </div>
+                </div><!--/.col-->
+
+          </div>
+        </div>
+        <br>
+        <!--    Opinion    -->
+
+          <div class="card">
+            <div class="card-body">
+              <div  class="row">
+                <div style="background-color: #eaf6ff"  class="card-header d-flex justify-content-between">
+                  <div class="header-title">
+                    <div style="background-color: #eaf6ff"  class="card-header d-flex justify-content-between">
+
+                    <h4 class="card-title"style="color: #000000;text-align: center" class="mb-0 text-primary"> Opinion : </h4>
+
+                    <button type="button" class="btn btn-secondary mr-1" data-toggle="modal" (click)="OpinionModal.show()">
+                       add Opinion!
+                    </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngFor="let op of ListOpinion | paginate: { itemsPerPage: 3, currentPage: pageOp,totalItems:ListOpinion.length }" >
+                  <div class="d-flex justify-content-between"  >
+                    <p class="mb-0 text-primary">{{op.user.name}}</p>
+                    <div class="App"  >
+                      <div class="flex-container">
+                        <ng-container  *ngFor="let star of stars">
+                          <app-start-opinion  [starId]="star" [rating]="op.user.ratingForum.rating"
+                                    (bigClick)="updateRating(star)">
+                          </app-start-opinion>
+                        </ng-container>
+                      </div>
+                    </div>
+                   </div>
+                  <div>
+                    <p>{{op.description}}</p>
+                  </div>
+                  <hr>
+                </div>
+                <pagination-controls (pageChange)="pageOp = $event"></pagination-controls>
+
+              </div>
+            </div>
+          </div>
+
+
+        <br>
+          <!--    GAME-->
+          <div class="card">
+            <div class="card-body">
+              <div  class="row">
+                  <div class="header-title">
+                    <div style="background-color: #eaf6ff"  class="card-header d-flex justify-content-between">
+                    <h4  class="card-title"style="color: #000000;margin-top: 20px" class="mb-0 text-primary" >GAME Memory</h4>
+                    <button routerLink="Game/Memory" style="width: 60px; height: 50px" class="btn btn-success  mt-3"  style="border-radius: 40%; " >Go</button>
+
+                  </div>
+                    <br>
+                </div>
+                  <div class="header-title">
+                    <div style="background-color: #eaf6ff"  class="card-header d-flex justify-content-between">
+                    <h4  class="card-title"style="color: #000000;margin-top: 20px" class="mb-0 text-primary" >GAME X/O</h4>
+                    <a routerLink="Game/XO" style="width: 60px; height: 50px " class="btn btn-success  mt-3"  style="border-radius: 40%; " > GO</a>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+   <!--     <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title" style="color: #303030">Events</h4>
+            </div>
+            <div class="card-header-toolbar d-flex align-items-center">
+              <div class="dropdown">
+                <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                  <i class="ri-more-fill h4"></i>
+                </div>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" style="">
+                  <a class="dropdown-item" href="#"><i class="ri-eye-fill me-2"></i>View</a>
+                  <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill me-2"></i>Delete</a>
+                  <a class="dropdown-item" href="#"><i class="ri-pencil-fill me-2"></i>Edit</a>
+                  <a class="dropdown-item" href="#"><i class="ri-printer-fill me-2"></i>Print</a>
+                  <a class="dropdown-item" href="#"><i class="ri-file-download-fill me-2"></i>Download</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <ul class="media-story list-inline m-0 p-0">
+              <li class="d-flex mb-4 align-items-center ">
+                <img src="../assets/images/page-img/s4.jpg" alt="story-img" class="rounded-circle img-fluid">
+                <div class="stories-data ms-3">
+                  <h5>Web Workshop</h5>
+                  <p class="mb-0">1 hour ago</p>
+                </div>
+              </li>
+              <li class="d-flex align-items-center">
+                <img src="../assets/images/page-img/s5.jpg" alt="story-img" class="rounded-circle img-fluid">
+                <div class="stories-data ms-3">
+                  <h5>Fun Events and Festivals</h5>
+                  <p class="mb-0">1 hour ago</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Upcoming Birthday</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <ul class="media-story list-inline m-0 p-0">
+              <li class="d-flex mb-4 align-items-center">
+                <img src="../assets/images/user/01.jpg" alt="story-img" class="rounded-circle img-fluid">
+                <div class="stories-data ms-3">
+                  <h5>Anna Sthesia</h5>
+                  <p class="mb-0">Today</p>
+                </div>
+              </li>
+              <li class="d-flex align-items-center">
+                <img src="../assets/images/user/02.jpg" alt="story-img" class="rounded-circle img-fluid">
+                <div class="stories-data ms-3">
+                  <h5>Paul Molive</h5>
+                  <p class="mb-0">Tomorrow</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Suggested Pages</h4>
+            </div>
+            <div class="card-header-toolbar d-flex align-items-center">
+              <div class="dropdown">
+                <div class="dropdown-toggle" id="dropdownMenuButton01" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                  <i class="ri-more-fill h4"></i>
+                </div>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton01">
+                  <a class="dropdown-item" href="#"><i class="ri-eye-fill me-2"></i>View</a>
+                  <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill me-2"></i>Delete</a>
+                  <a class="dropdown-item" href="#"><i class="ri-pencil-fill me-2"></i>Edit</a>
+                  <a class="dropdown-item" href="#"><i class="ri-printer-fill me-2"></i>Print</a>
+                  <a class="dropdown-item" href="#"><i class="ri-file-download-fill me-2"></i>Download</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <ul class="suggested-page-story m-0 p-0 list-inline">
+              <li class="mb-3">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="../assets/images/page-img/42.png" alt="story-img" class="rounded-circle img-fluid avatar-50">
+                  <div class="stories-data ms-3">
+                    <h5>Iqonic Studio</h5>
+                    <p class="mb-0">Lorem Ipsum</p>
+                  </div>
+                </div>
+                <img src="../assets/images/small/img-1.jpg" class="img-fluid rounded" alt="Responsive image">
+                <div class="mt-3"><a href="#" class="btn d-block"><i class="ri-thumb-up-line me-2"></i> Like Page</a></div>
+              </li>
+              <li class="">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="../assets/images/page-img/42.png" alt="story-img" class="rounded-circle img-fluid avatar-50">
+                  <div class="stories-data ms-3">
+                    <h5>Cakes & Bakes </h5>
+                    <p class="mb-0">Lorem Ipsum</p>
+                  </div>
+                </div>
+                <img src="../assets/images/small/img-2.jpg" class="img-fluid rounded" alt="Responsive image">
+                <div class="mt-3"><a href="#" class="btn d-block"><i class="ri-thumb-up-line me-2"></i> Like Page</a></div>
+              </li>
+
+          </div>
+        </div>-->
+    </div>
+</div>
+</div><!--
+                      <div   bsModal #infoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div *ngIf="Test==false" style="margin-left:350px " class="modal-dialog modal-info" role="document">
+                          <div class="modal-content" style="width: 150%">
+                            <div class="modal-header">
+/**************************************************************************
+                              <div class="container">
+                                <div class="card">
+                                  <div class="d-flex justify-content-between p-3">
+                                    <div class="image">
+                                      <img src="https://img.icons8.com/color/96/eeeeee/angularjs.png" width="99" alt="logo">
+                                    </div>
+                                    <div class="quiz-header">
+                                      <h4 style="font-family: cursive;">Angular & TypeScript Quiz!</h4>
+                                      Espan <span style="font-style: italic">  Welcome {{user.name}}</span>
+                                    </div>
+                                  </div>
+                                  <div class="d-flex justify-content-around py-3">
+
+                                    <div class="question-remain">
+                                      <span style="font-style: italic;">Question {{i+1}} of {{list.nbrQuestion}}</span>
+                                    </div>
+                                    <div class="timer">
+                                      60 sec
+                                    </div>
+
+                                  </div>
+                                  <div class="progress m-3" >
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar"  [ngStyle]="{'width':progress+'%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                  </div>
+                                  <div class="question">
+                                    {{ListQuestion[i].question}}
+                                  </div>
+                                  <div class="options">
+                                    <ol>
+
+                                      <div style="margin: 10px 0px 10px 40px" *ngFor="let a of ListAnswer">
+                                        <div *ngIf="ListQuestion[i].id==a.question.id" aria-label="Select an option" >
+                                              <li> <div class="card" (click)="radioChangeHandler1(a.id)"  (click)="AddResponseUser(selected)" (click)="ConseilQuizz(list.id)" (click)="NextPage() ">
+                                              <div class="form-check">
+                                                <label class="form-check-label" for="radio1">
+                                                  {{a.typeAnswer}}
+                                                </label>
+                                              </div>
+                                              </div></li>
+                                            </div>
+                                          </div>
+
+                                    </ol>
+                                  </div>
+                                  <div class="d-flex justify-content-between">
+                                    <button class="btn btn-danger danger" [disabled]="i===0" (click)="PrecedentPage()"> précédent</button>
+                                    <button></button>
+                                    <button class="btn btn-success success" (click)="AddResponseUser(selected)" (click)="ConseilQuizz(list.id)"  (click)="NextPage()" > next</button>
+                                  </div>
+                                </div>
+                              </div>
+
+                              /****************************************************************************************
+
+                              <h4 class="modal-title" >Thème : <strong>{{list.description}}</strong></h4>
+                              <button type="button" class="close" (click)="infoModal.hide()"  aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body" style="background-color: #e8ffff">
+                              <div class="row" id="header" >
+                                <div class="col-lg-12">
+                                </div>
+
+                                <div class="col-lg-2">
+                                  <div id="time">
+                                    {{counter}}s
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-lg-7">
+                                  <button class="btn" style=" background-color: #d8e6ff; border: 0; margin-top: 10px;">
+                                    <h3> <small>Allez</small> <strong>{{user.name}} </strong> !</h3>
+                                  </button>
+                                </div>
+
+                                <div class="col-lg-5">
+                                  <h3 style="margin-top: 10px;">Cochez la bon réponse</h3>
+                                </div>
+                              </div>
+                              <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                  <div class="carousel-item ">
+                                    <img src="..." class="d-block w-100" alt="...">
+                                  </div>
+
+                                  <div class="col-sm-7">
+                                    <div class="card" style=" width: 180%; ">
+
+
+                                      <carousel  >
+                                        <slide *ngFor="let q of ListQuestion" >
+                                          <div >
+                                            <div class="card" id="quizz" >
+
+                                              <div class="carousel-item active" style="margin:30px 30px 30px 80px;width: 60%" >
+                                                <h4>{{q.question}}</h4>
+
+                                                <div style="margin: 10px 0px 10px 40px" *ngFor="let a of ListAnswer">
+                                                  <div *ngIf="q.id==a.question.id" aria-label="Select an option" >
+                                                    <div class="form-group row">
+                                                      <div class="col-md-9 col-form-label">
+                                                        <div class="form-check">
+                                                          <input class="form-check-input" type="radio" name="radios" id="radio1" (change)="radioChangeHandler($event)" [value]="a.id">
+                                                          <label class="form-check-label" for="radio1">
+                                                            {{a.typeAnswer}}
+                                                          </label>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+
+                                                -->
+                                                <!-- the radio button change will be reflected below
+<p><span>You selected: </span><b>{{selected}}</b></p>
+
+<div style="text-align: center;">
+  <button class="btn btn-danger"  style="background: #27104e; border: 0; margin-top: 10px;" (click)="AddResponseUser(selected)" (click)="ConseilQuizz(list.id)">
+    <h4  >Valider</h4>
+  </button>
+
+  <br><br>
+</div>
+</div>
+</div>
+</div>
+</slide>
+
+</carousel>
+
+</div>
+</div>
+
+</div>
+</div>
+<button type="button" class="btn btn-secondary" (click)="infoModal.hide()" (click)="AZERO()">Close</button>
+
+</div>
+
+</div>
+</div>
+<div *ngIf="Test==true" style="margin-left:350px " class="modal-dialog modal-info" role="document">
+  <div class="modal-content" style="width: 150%">
+    <div class="modal-header">
+
+      <h4 class="modal-title" >Thème : <strong>{{list.description}}</strong></h4>
+      <button type="button" class="close" (click)="infoModal.hide()" (click)="AZERO()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="background-color: #e8ffff">
+      <a  style="width: 50px; height: 50px;" (click)="changeTest()" (click)="infoModal.show()" (click)="startCounter()" (click)="GetQuestion(list.id)" class="btn btn-primary  mt-3" style="border-radius: 40%; " >Re:Go!</a>
+      <a  style="width: 50px; height: 50px" (click)="getPdf(list.id)" class="btn btn-primary mt-3" style="border-radius: 40%; " >PDF</a>
+      <button type="button" class="btn btn-secondary" (click)="infoModal.hide()" (click)="AZERO()">Close</button>
+
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+******************************************************************************************************************
+<div class="container1 justify-content-center mt-5 border-left border-right">
+  <div class="d-flex justify-content-center pt-3 pb-2"><input type="text" name="text"
+                                                              [(ngModel)]="comment.description"
+                                                              (keypress)="addComment($event)"
+                                                              placeholder="+ Add a note"
+                                                              class="form-control addtxt"></div>
+
+  <div class="d-flex justify-content-center py-2" *ngFor="let c of listCommment.reverse() ">
+    <div class="second py-2 px-2" ><span class="text1"> {{c.description}}</span>
+      <div class="d-flex justify-content-between py-1 pt-2">
+        <div><img src="https://i.imgur.com/AgAC1Is.jpg" width="18"><span class="text2">Martha</span></div>
+        <div><span class="text3">Upvote?</span><span class="thumbup"><i class="fa fa-thumbs-o-up"></i></span><span
+          class="text4">3</span></div>
+      </div>
+    </div>
+  </div>
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">COnseil {{user.name}}</h4>
+        <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>remarque Commentaire :{{conseilUser.remarqueComment}}</p>
+        <p>remarque Like :{{conseilUser.remarqueJaime}}</p>
+        <p>remarque Publication :{{conseilUser.remarquePub}}</p>
+        <div style="width: 60% ;"  *ngIf="conseilUser.pourCentageQVTBAD != 0 || conseilUser.pourCentageQVTGOOD != 0 || conseilUser.pourCentageQVTEX != 0" class="chart-wrapper">
+          <canvas    baseChart class="chart"
+                     [data]="[conseilUser.pourCentageQVTBAD, conseilUser.pourCentageQVTGOOD,conseilUser.pourCentageQVTEX]"
+                     [labels]="['%BAD', '%GOOD', '%EXCELENT']"
+                     [chartType]="pieChartType"
+                     (chartHover)="chartHovered($event)"
+                     (chartClick)="chartClicked($event)">{{conseilUser.id}}</canvas>
+          <p>remarque QVT :{{conseilUser.remarqueQVT}}</p>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+-->
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"> <strong  class="btn btn-soft-primary">Conseil</strong> {{user.name}}</h4>
+
+        <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <div>
+        <div class="image">
+          <img src="https://creayayadesign.com/wp-content/uploads/2018/06/commentaires-haineux-facebook.jpg" width="380" alt="logo">
+        </div>
+        <p><strong  class="btn btn-soft-primary"> remarque Commentaire :</strong>{{conseilUser.remarqueComment}}</p>
+          </div>
+          <div>
+            <div style="margin-right: 60px" class="image">
+              <img src="https://www.tijbangkokrules.org/images/mobile/Mobile3_banner_publication.png" width="230" alt="logo">
+            </div>
+            <p><strong  class="btn btn-soft-primary">remarque Publication :</strong>{{conseilUser.remarquePub}}</p>
+        </div>
+        </div>
+        <div class="d-flex justify-content-between">
+        <div>
+        <div class="image">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Facebook_Like_button.svg/1200px-Facebook_Like_button.svg.png" width="200" alt="logo">
+          </div>
+
+        <p ><strong  class="btn btn-soft-primary">remarque Like :</strong>{{conseilUser.remarqueJaime}}</p>
+        </div>
+        <div style="width: 60% ;"  *ngIf="conseilUser.pourCentageQVTBAD != 0 || conseilUser.pourCentageQVTGOOD != 0 || conseilUser.pourCentageQVTEX != 0" class="chart-wrapper">
+          <canvas    baseChart class="chart"
+                     [data]="[conseilUser.pourCentageQVTBAD, conseilUser.pourCentageQVTGOOD,conseilUser.pourCentageQVTEX]"
+                     [labels]="['%BAD', '%GOOD', '%EXCELENT']"
+                     [chartType]="pieChartType"
+                     (chartHover)="chartHovered($event)"
+                     (chartClick)="chartClicked($event)">{{conseilUser.id}}</canvas>
+          <p><strong  class="btn btn-soft-primary">remarque QVT :</strong>{{conseilUser.remarqueQVT}}</p>
+
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div bsModal #OpinionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Conseil {{user.name}}</h4>
+        <button type="button" class="close" (click)="OpinionModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="" method="post" class="form-horizontal"  #f5="ngForm">
+          <div class="modal-body">
+            <div class="form-group row">
+              <label class="col-sm-5 col-form-label" >Opinion :</label>
+              <div class="col-sm-6">
+                <input [(ngModel)]="op.description" [ngModelOptions]="{standalone: true}" type="text" id="input-normal2" name="input-normal" class="form-control" required>
+             {{op.description}}
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="infoModal.hide()">Close</button>
+              <button  (click)="AddOpinion()" type="button" class="btn btn-info" [disabled]="f5.invalid" (click)="OpinionModal.hide()">Save changes</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="image">
+  <img src="src/assets/comment.jpg" width="99" alt="logo">
+</div>

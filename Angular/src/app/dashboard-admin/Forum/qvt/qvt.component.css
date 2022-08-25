@@ -1,0 +1,4 @@
+.col-sm-6 col-md-4 {
+  display: flex;
+  flex-wrap: wrap;
+}

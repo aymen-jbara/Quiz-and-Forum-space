@@ -1,0 +1,208 @@
+<div style="margin-left: 8%" id="content-page" class="content-page">
+    <div class="row">
+    <div style="display: flex">
+
+<div style="margin: 50px 50px 50px 50px" *ngIf="ListQVT.length < 1"  class="container-fluid mt-100">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Liste QVT</h5>
+        </div>
+        <div class="card-body cart">
+          <div class="col-sm-12 empty-cart-cls text-center">
+            <h3><strong>Vous n'avez pas de QVT </strong></h3>
+            <button type="button" class="btn btn-success mr-1" data-toggle="modal" (click)="successModal.show()">
+              Creer une QVT
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<div style="margin: 20px 0px 0px 150px" *ngIf="ListQVT.length >0">
+
+  <button style="margin-bottom: 20px" type="button" class="btn btn-success mr-1" data-toggle="modal" (click)="successModal.show()">
+    ADD QVT
+  </button>
+
+
+  <!--Card with switch/-->
+  <div class="row">
+    <div  class="col-sm-7 col-md-3" *ngFor="let list of ListQVT">
+      <div  class="card" >
+        <div class="card-header" >
+          <div style="display: flex ">
+            <div class="card-header-actions" >
+              <label class="switch switch-sm switch-label switch-info" >
+                <input type="checkbox" class="switch-input" checked>
+                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+              </label>
+            </div>
+            <div class="card-header d-flex justify-content-between">
+            <p >{{list.description}} </p>
+              <div class="card-header-toolbar d-flex align-items-center">
+                <div class="dropdown">
+                  <div class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+                    <i class="ri-more-fill h4"></i>
+                  </div>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" style="">
+                    <a class="dropdown-item" ><i class="ri-eye-fill me-2"></i>View</a>
+                    <a (click)="deleteQVT(list)" class="dropdown-item" ><i class="ri-delete-bin-6-fill me-2"></i>Delete</a>
+                    <a  (click)="myModal.show()" (click)="up(list.id)" class="dropdown-item" ><i class="ri-pencil-fill me-2"></i>Edit</a>
+                    <a (click)="infoModal.show()" *ngIf="list.nbrQuestion>list.nbrQuestionMAX" class="dropdown-item" ><i class="ri-printer-fill me-2"></i>ADD Question</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div *ngFor="let lists of ListRQuizz" >
+          <div  class="card-body" *ngIf="lists.qvt.id==list.id">
+            <div style="width: 120% ;margin-left: -30px"  *ngIf="lists.pourCentageBAD != 0 || lists.pourCentageGood != 0 || lists.pourCentageEx != 0" class="chart-wrapper">
+              <canvas    baseChart class="chart"
+                        [data]="[lists.pourCentageBAD,lists.pourCentageGood,lists.pourCentageEx]"
+                        [labels]="['%BAD', '%GOOD', '%EXCELENT']"
+                        [chartType]="pieChartType"
+                        (chartHover)="chartHovered($event)"
+                        (chartClick)="chartClicked($event)">{{lists.id}}</canvas>
+              <p style="margin-left: 35px;margin-top: 16px" >{{lists.remarque}}</p>
+
+            </div>
+            <p style="margin-top: 13px" *ngIf="lists.pourCentageBAD == 0 && lists.pourCentageGood == 0 && lists.pourCentageEx == 0">
+              <alert type="danger" >
+                <strong >Missing Data</strong>
+                <br>
+                <br>
+                <br>
+              </alert>
+              <img   src="https://us.123rf.com/450wm/vectorshowstudio/vectorshowstudio1608/vectorshowstudio160800556/61463260-attention-icon-danger-button-and-attention-warning-sign-attention-security-alarm-symbol-danger-warni.jpg?ver=6" style=" width: 27%;" alt="">
+              <strong>The quiz</strong> was not answered.</p>
+
+          </div>
+
+        </div>
+        <p style="text-align: center">Question : {{list.nbrQuestionMAX}}/{{list.nbrQuestion }}</p>
+
+      </div>
+      <!--******************************************************************************************************************-->
+
+      <div bsModal #infoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-info" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">ADD <strong>Question</strong></h4>
+              <button type="button" class="close" (click)="infoModal.hide()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="" method="post" class="form-horizontal"  #f2="ngForm">
+              <div class="modal-body">
+                <div class="form-group row">
+                  <label class="col-sm-5 col-form-label" for="input-normal">Question :</label>
+                  <div class="col-sm-6">
+                    <input [(ngModel)]="question.question" type="text" id="input-normal2" name="input-normal" class="form-control" required>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" (click)="infoModal.hide()">Close</button>
+                  <button  (click)="onSubmitQuestion(list)" type="button" class="btn btn-info"  (click)="infoModal.hide()">Save changes</button>
+                </div>
+              </div>
+
+            </form>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
+      <!--******************************************************************************************************************-->
+
+    </div><!--/.col-->
+
+  </div>
+
+  <div class="panel-header panel-header-sm" >
+  </div>
+
+</div>
+
+<div bsModal #successModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">ADD <strong>QVT</strong></h4>
+        <button type="button" class="close" (click)="successModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post" class="form-horizontal"  #f="ngForm">
+
+        <div class="card-body">
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" for="input-normal">Description :</label>
+            <div class="col-sm-6">
+              <input [(ngModel)]="qvt.description"  type="text" id="input-normal" name="input-normal" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" for="input-normal">nbr Question :</label>
+            <div class="col-sm-6">
+              <input [(ngModel)]="qvt.nbrQuestion" type="number" id="input-normal1" name="input-normal" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="successModal.hide()">Close</button>
+          <button (click)="successModal.hide()" (click)="onSubmit()"  [disabled]="f.invalid" type="button" class="btn btn-success">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<div bsModal #myModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">ADD <strong>QVT</strong></h4>
+        <button type="button" class="close" (click)="myModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post" class="form-horizontal"  #f3="ngForm">
+
+        <div class="card-body">
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" for="input-normal">Description : {{newQvt.description}}</label>
+            <div class="col-sm-6">
+              <input [(ngModel)]="newQvt.description"  type="text" id="input-normal5" name="input-normal" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-5 col-form-label" for="input-normal">nbr Question : {{newQvt.nbrQuestion}}</label>
+            <div class="col-sm-6">
+              <input [(ngModel)]="newQvt.nbrQuestion" type="number" id="input-normal6" name="input-normal" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="myModal.hide()">Close</button>
+          <button (click)="myModal.hide()" (click)="Uapdate()"  [disabled]="f3.invalid" type="button" class="btn btn-success">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div>
+</div>
+</div>
+
